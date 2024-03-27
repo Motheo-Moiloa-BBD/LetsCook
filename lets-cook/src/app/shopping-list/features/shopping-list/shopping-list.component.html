@@ -2,6 +2,14 @@
   <section class="col-xs-10">
     <app-edit-shopping-list></app-edit-shopping-list>
     <hr />
-    <p>The List</p>
+    <ul class="list-group">
+      <a
+        routerLink=""
+        class="list-group-item"
+        *ngFor="let ingredient of ingredients"
+      >
+        {{ ingredient.name }} ({{ ingredient.amount }})
+      </a>
+    </ul>
   </section>
 </section>
