@@ -9,7 +9,7 @@ const routes: Routes = [
     component: RecipeListComponent,
   },
   {
-    path: 'detail/:id',
+    path: 'detail/:name',
     component: RecipeDetailComponent,
   },
 ];
