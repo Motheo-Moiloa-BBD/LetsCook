@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ShoppingListComponent } from './features/shopping-list/shopping-list.component';
+import { EditShoppingListComponent } from './features/edit-shopping-list/edit-shopping-list.component';
 
 const routes: Routes = [
   {
@@ -9,6 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'edit/id',
+    component: EditShoppingListComponent,
   },
 ];
 
