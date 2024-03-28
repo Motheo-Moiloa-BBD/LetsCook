@@ -5,7 +5,7 @@ import { NavBarComponent } from './shared/features/nav-bar/nav-bar.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: '/recipe-book',
     pathMatch: 'full',
   },
   {
@@ -23,11 +23,6 @@ const routes: Routes = [
       import('./recipe-book/recipe-book.module').then(
         (m) => m.RecipeBookModule
       ),
-  },
-  {
-    path: 'home',
-    component: NavBarComponent,
-    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },
 ];
 

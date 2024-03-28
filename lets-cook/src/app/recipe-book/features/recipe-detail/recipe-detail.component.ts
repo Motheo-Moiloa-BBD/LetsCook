@@ -7,11 +7,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./recipe-detail.component.css'],
 })
 export class RecipeDetailComponent implements OnInit {
-  recipeName?: string;
-
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.recipeName = this.route.snapshot.params['name'];
+    //this.recipeName = this.route.snapshot.params['name'];
   }
 }
