@@ -1,27 +1,59 @@
 <div class="row">
   <div class="col-xs-12">
-    <form>
+    <form [formGroup]="shoppingListForm" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-sm-5 form-group">
           <label for="name">Name</label>
-          <input id="name" type="text" class="form-control" #name />
+          <input
+            id="name"
+            type="text"
+            class="form-control"
+            formControlName="name"
+          />
+          <span
+            class="text-danger"
+            *ngIf="(formControls['name'].touched || formControls['name'].dirty || submitted) && formControls['name'].errors?.['required']"
+            >Name is required.</span
+          >
         </div>
-        <div class="col-sm-2 form-group">
+        <div class="col-sm-3 form-group">
           <label for="amount">Amount</label>
-          <input id="amount" type="text" class="form-control" #amount />
+          <input
+            id="amount"
+            type="number"
+            class="form-control"
+            formControlName="amount"
+          />
+          <span
+            class="text-danger"
+            *ngIf="(formControls['amount'].touched || formControls['amount'].dirty || submitted) && formControls['amount'].errors?.['required']"
+          >
+            Amount is required.
+          </span>
+          <span
+            class="text-danger"
+            *ngIf="(formControls['amount'].touched || formControls['amount'].dirty || submitted) && formControls['amount'].errors?.['pattern']"
+          >
+            Amount must be greater than zero.
+          </span>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12 btn-toolbar">
-          <button
-            class="btn btn-success"
-            type="submit"
-            (click)="addIngredient(name.value, amount.value)"
-          >
-            Add
+          <button class="btn btn-success" type="submit">
+            {{ editMode ? "Update" : "Add" }}
           </button>
-          <button class="btn btn-danger" type="button">Delete</button>
-          <button class="btn btn-primary" type="button">Clear</button>
+          <button
+            *ngIf="editMode"
+            class="btn btn-danger"
+            type="button"
+            (click)="onDelete()"
+          >
+            Delete
+          </button>
+          <button class="btn btn-primary" type="button" (click)="onClear()">
+            Clear
+          </button>
         </div>
       </div>
     </form>

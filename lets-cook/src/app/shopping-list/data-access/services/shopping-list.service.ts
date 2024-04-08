@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/shared/data-access/models/ingredient.model';
 
 @Injectable({
@@ -7,6 +7,7 @@ import { Ingredient } from 'src/app/shared/data-access/models/ingredient.model';
 })
 export class ShoppingListService {
   ingredientsChanged: BehaviorSubject<Ingredient[]>;
+  startedEditing = new Subject<number>();
 
   private ingredients: Ingredient[] = [
     {
@@ -27,6 +28,10 @@ export class ShoppingListService {
     return this.ingredients.slice();
   }
 
+  getIngredient(index: number): Ingredient {
+    return this.ingredients[index];
+  }
+
   addIngredient(ingredient: Ingredient) {
     this.ingredients.push(ingredient);
     this.ingredientsChanged.next(this.ingredients.slice());
@@ -34,6 +39,17 @@ export class ShoppingListService {
 
   addingredients(ingredients: Ingredient[]) {
     this.ingredients.push(...ingredients);
+    this.ingredientsChanged.next(this.ingredients.slice());
+  }
+
+  updateIngredient(index: number, updateIngredient: Ingredient) {
+    this.ingredients[index] = updateIngredient;
+
+    this.ingredientsChanged.next(this.ingredients.slice());
+  }
+
+  deleteIngredient(index: number) {
+    this.ingredients.splice(index, 1);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 }

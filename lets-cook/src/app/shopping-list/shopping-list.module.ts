@@ -4,11 +4,16 @@ import { CommonModule } from '@angular/common';
 import { ShoppingListRoutingModule } from './shopping-list-routing.module';
 import { ShoppingListComponent } from './features/shopping-list/shopping-list.component';
 import { EditShoppingListComponent } from './features/edit-shopping-list/edit-shopping-list.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ShoppingListComponent, EditShoppingListComponent],
-  imports: [CommonModule, ShoppingListRoutingModule, FormsModule],
+  imports: [
+    CommonModule,
+    ShoppingListRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   exports: [ShoppingListComponent],
 })
 export class ShoppingListModule {}

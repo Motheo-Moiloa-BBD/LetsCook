@@ -5,9 +5,9 @@
       <hr />
       <ul class="list-group">
         <a
-          routerLink=""
           class="list-group-item"
-          *ngFor="let ingredient of ingredients"
+          *ngFor="let ingredient of ingredients; let id = index"
+          (click)="onEditIngredient(id)"
         >
           {{ ingredient.name }} ({{ ingredient.amount }})
         </a>
