@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RecipeDetailComponent } from './recipe-detail.component';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('RecipeDetailComponent', () => {
   let component: RecipeDetailComponent;
@@ -9,7 +10,10 @@ describe('RecipeDetailComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      providers: [
+        { provide: ActivatedRoute, useValue: { params: of({ id: 1 }) } },
+      ],
+      imports: [RouterModule.forRoot([])],
       declarations: [RecipeDetailComponent],
     }).compileComponents();
   }));
