@@ -77,13 +77,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "local": {
-              "browserTarget": "lets-cook:build:local"
+              "buildTarget": "lets-cook:build:local"
             },
             "development": {
-              "browserTarget": "lets-cook:build:development"
+              "buildTarget": "lets-cook:build:development"
             },
             "production": {
-              "browserTarget": "lets-cook:build:production"
+              "buildTarget": "lets-cook:build:production"
             }
           },
           "defaultConfiguration": "local"
@@ -91,7 +91,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "lets-cook:build"
+            "buildTarget": "lets-cook:build"
           }
         },
         "test": {
