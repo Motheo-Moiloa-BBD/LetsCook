@@ -3,11 +3,13 @@ import { Recipe } from '../models/recipe.model';
 import { Ingredient } from 'src/app/shared/data-access/models/ingredient.model';
 import { ShoppingListService } from 'src/app/shopping-list/data-access/services/shopping-list.service';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecipeService {
+  recipesChanges: Subject<Recipe[]> = new Subject();
   private recipes: Recipe[] = [
     {
       id: 1,
@@ -61,5 +63,25 @@ export class RecipeService {
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
     this.shoppingListService.addingredients(ingredients);
     this.router.navigateByUrl('/shopping-list');
+  }
+
+  addRecipe(recipe: Recipe) {
+    this.recipes.push(recipe);
+    this.recipesChanges.next(this.recipes.slice());
+  }
+
+  updateReceipe(id: number, newRecipe: Recipe) {
+    this.recipes[
+      this.recipes.indexOf(this.recipes.find((recipe) => recipe.id === id)!)
+    ] = newRecipe;
+    this.recipesChanges.next(this.recipes.slice());
+  }
+
+  deleteRecipe(id: number) {
+    this.recipes.splice(
+      this.recipes.indexOf(this.recipes.find((recipe) => recipe.id === id)!),
+      1
+    );
+    this.recipesChanges.next(this.recipes.slice());
   }
 }
