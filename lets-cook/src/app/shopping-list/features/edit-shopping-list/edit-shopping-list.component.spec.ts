@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EditShoppingListComponent } from './edit-shopping-list.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('EditShoppingListComponent', () => {
   let component: EditShoppingListComponent;
@@ -8,6 +9,7 @@ describe('EditShoppingListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      imports: [FormsModule, ReactiveFormsModule],
       declarations: [EditShoppingListComponent],
     }).compileComponents();
   }));

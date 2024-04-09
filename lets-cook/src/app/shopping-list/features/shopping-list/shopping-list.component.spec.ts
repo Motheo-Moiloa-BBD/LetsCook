@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ShoppingListComponent } from './shopping-list.component';
 import { ShoppingListModule } from '../../shopping-list.module';
-import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule } from '@angular/router';
 
 describe('ShoppingListComponent', () => {
   let component: ShoppingListComponent;
@@ -10,7 +10,7 @@ describe('ShoppingListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ShoppingListModule, RouterTestingModule],
+      imports: [ShoppingListModule, RouterModule.forRoot([])],
       declarations: [ShoppingListComponent],
     }).compileComponents();
   }));
