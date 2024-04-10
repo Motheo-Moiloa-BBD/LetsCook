@@ -5,3 +5,7 @@
 .content {
   padding: var(--content-padding);
 }
+
+a {
+  cursor: pointer;
+}
