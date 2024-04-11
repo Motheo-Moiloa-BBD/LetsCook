@@ -4,10 +4,11 @@ import { NavBarComponent } from './features/nav-bar/nav-bar.component';
 import { RouterModule } from '@angular/router';
 import { DropDownDirective } from './utils/directives/drop-down.directive';
 import { HttpClientModule } from '@angular/common/http';
+import { LoadingSpinnerComponent } from './ui/loading-spinner/loading-spinner.component';
 
 @NgModule({
-  declarations: [NavBarComponent, DropDownDirective],
+  declarations: [NavBarComponent, DropDownDirective, LoadingSpinnerComponent],
   imports: [CommonModule, RouterModule, HttpClientModule],
-  exports: [DropDownDirective],
+  exports: [DropDownDirective, LoadingSpinnerComponent],
 })
 export class SharedModule {}

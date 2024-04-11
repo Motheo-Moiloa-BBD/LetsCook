@@ -24,6 +24,11 @@ const routes: Routes = [
         (m) => m.RecipeBookModule
       ),
   },
+  {
+    path: 'auth',
+    component: NavBarComponent,
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+  },
 ];
 
 @NgModule({
