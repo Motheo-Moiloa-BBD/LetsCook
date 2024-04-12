@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NavBarComponent } from './shared/features/nav-bar/nav-bar.component';
+import { authGuard } from './auth/utils/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
   {
     path: 'recipe-book',
     component: NavBarComponent,
+    canActivate: [authGuard],
     loadChildren: () =>
       import('./recipe-book/recipe-book.module').then(
         (m) => m.RecipeBookModule
