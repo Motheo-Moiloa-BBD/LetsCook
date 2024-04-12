@@ -59,8 +59,14 @@
         </button>
       </div>
     </form>
-    <div class="alert alert-danger alert" *ngIf="error !== ''">
+    <!-- <div class="alert alert-danger alert" *ngIf="error !== ''">
       <p>{{ error }}</p>
-    </div>
+    </div> -->
+    <!-- <app-alert
+      [message]="error"
+      *ngIf="error !== ''"
+      (close)="onHandleError()"
+    ></app-alert> -->
+    <ng-template appPlaceHolder></ng-template>
   </div>
 </div>
