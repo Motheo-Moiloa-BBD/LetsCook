@@ -12,6 +12,7 @@ import { AuthResponse } from '../models/auth-response.model';
 import { Auth } from '../models/auth.model';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class AuthService {
   signUp(userDetails: Auth): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDYtFeSoEOMxXv8j_Qu3DmiEUGQqdDf0iI`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebaseAPIKey}`,
         { ...userDetails, returnSecureToken: true }
       )
       .pipe(catchError(this.handleError));
@@ -33,7 +34,7 @@ export class AuthService {
   signIn(userDetails: Auth): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDYtFeSoEOMxXv8j_Qu3DmiEUGQqdDf0iI`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebaseAPIKey}`,
         { ...userDetails, returnSecureToken: true }
       )
       .pipe(
