@@ -26,9 +26,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   onSaveData() {
-    this.dataStorageService.saveRecipes().subscribe((recipes: Recipe[]) => {
-      console.log(recipes);
-    });
+    this.dataStorageService.saveRecipes().subscribe();
   }
 
   onFetchData() {

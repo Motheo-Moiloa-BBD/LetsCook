@@ -59,8 +59,7 @@ export class AuthComponent implements OnDestroy {
       }
 
       auth$.subscribe({
-        next: (response) => {
-          console.log(response);
+        next: () => {
           this.isLoading = false;
         },
         error: (error: Error) => {
