@@ -20,7 +20,7 @@ jobs:
       - name: Build
         working-directory: ./lets-cook
         run: npm run build
-      - uses: w9jds/firebase-action@main
+      - uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
