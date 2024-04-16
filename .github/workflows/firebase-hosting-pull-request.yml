@@ -26,3 +26,4 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LETSCOOK_SERVER_81A77 }}"
           projectId: letscook-server-81a77
+          entryPoint: ./lets-cook

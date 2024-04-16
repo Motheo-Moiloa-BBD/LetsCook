@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoadingSpinnerComponent } from './ui/loading-spinner/loading-spinner.component';
 import { AlertComponent } from './ui/alert/alert.component';
 import { PlaceHolderDirective } from './utils/directives/place-holder.directive';
+import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { PlaceHolderDirective } from './utils/directives/place-holder.directive'
     LoadingSpinnerComponent,
     AlertComponent,
     PlaceHolderDirective,
+    PageNotFoundComponent,
   ],
   imports: [CommonModule, RouterModule, HttpClientModule],
   exports: [

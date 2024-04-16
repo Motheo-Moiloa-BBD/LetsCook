@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NavBarComponent } from './shared/features/nav-bar/nav-bar.component';
 import { authGuard } from './auth/utils/guards/auth.guard';
+import { PageNotFoundComponent } from './shared/features/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
     component: NavBarComponent,
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
   },
+
+  //Page not found routes
+  { path: '404', component: PageNotFoundComponent },
+  { path: '**', redirectTo: '/404' },
 ];
 
 @NgModule({
