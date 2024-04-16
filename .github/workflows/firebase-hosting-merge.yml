@@ -15,6 +15,7 @@ jobs:
         with:
           node-version: "20.12.1"
       - name: Install dependencies
+        working-directory: ./lets-cook
         run: npm install
       - name: Build
         run: npm run build
