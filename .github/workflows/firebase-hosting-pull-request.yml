@@ -20,7 +20,7 @@ jobs:
       - name: Build
         working-directory: ./lets-cook
         run: npm run build
-      - name: Preview
+      - name: Live Preview of PR
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
