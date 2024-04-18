@@ -1,10 +1,4 @@
-import {
-  ActivatedRouteSnapshot,
-  MaybeAsync,
-  Resolve,
-  ResolveFn,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { Resolve } from '@angular/router';
 import { Recipe } from '../models/recipe.model';
 import { DataStorageService } from 'src/app/shared/data-access/services/data-storage.service';
 import { Observable, of } from 'rxjs';
@@ -17,10 +11,7 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
     private dataStorageService: DataStorageService,
     private recipeService: RecipeService
   ) {}
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<Recipe[]> {
+  resolve(): Observable<Recipe[]> {
     const recipes = this.recipeService.getRecipes();
 
     if (recipes.length === 0) {
