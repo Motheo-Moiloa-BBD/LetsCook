@@ -4,6 +4,10 @@ import { Ingredient } from 'src/app/shared/data-access/models/ingredient.model';
 import { ShoppingListService } from 'src/app/shopping-list/data-access/services/shopping-list.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { ShoppingListState } from 'src/app/shopping-list/data-access/models/shopping-list-state.model';
+import { addMultiple } from 'src/app/shopping-list/data-access/store/action/shopping-list.actions';
+import { AppState } from 'src/app/shared/data-access/models/app-state.model';
 
 @Injectable({
   providedIn: 'root',
@@ -51,7 +55,8 @@ export class RecipeService {
 
   constructor(
     private shoppingListService: ShoppingListService,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
   setRecipes(recipes: Recipe[]) {
@@ -68,7 +73,7 @@ export class RecipeService {
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
-    this.shoppingListService.addingredients(ingredients);
+    this.store.dispatch(addMultiple({ ingredients: ingredients }));
     this.router.navigateByUrl('/shopping-list');
   }
 
