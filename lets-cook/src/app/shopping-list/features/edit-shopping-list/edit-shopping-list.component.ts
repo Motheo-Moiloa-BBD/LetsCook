@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ShoppingListService } from '../../data-access/services/shopping-list.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/shared/data-access/models/ingredient.model';
@@ -10,10 +9,7 @@ import {
   stopEdit,
   update,
 } from '../../data-access/store/action/shopping-list.actions';
-import {
-  selectIngredientByIndex,
-  selectShoppingListState,
-} from '../../data-access/store/selector/shopping-list.selectors';
+import { selectShoppingListState } from '../../data-access/store/selector/shopping-list.selectors';
 import { AppState } from 'src/app/shared/data-access/models/app-state.model';
 
 @Component({
@@ -23,8 +19,8 @@ import { AppState } from 'src/app/shared/data-access/models/app-state.model';
 })
 export class EditShoppingListComponent implements OnInit, OnDestroy {
   submitted: boolean = false;
-  editSubscription?: Subscription;
   editMode: boolean = false;
+  editSubscription?: Subscription;
   editedItem?: Ingredient;
 
   shoppingListForm: FormGroup = new FormGroup({
@@ -35,10 +31,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     ]),
   });
 
-  constructor(
-    private shoppingListService: ShoppingListService,
-    private store: Store<AppState>
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.editSubscription = this.store

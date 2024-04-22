@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Recipe } from '../models/recipe.model';
 import { Ingredient } from 'src/app/shared/data-access/models/ingredient.model';
-import { ShoppingListService } from 'src/app/shopping-list/data-access/services/shopping-list.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { ShoppingListState } from 'src/app/shopping-list/data-access/models/shopping-list-state.model';
 import { addMultiple } from 'src/app/shopping-list/data-access/store/action/shopping-list.actions';
 import { AppState } from 'src/app/shared/data-access/models/app-state.model';
 
@@ -53,11 +51,7 @@ export class RecipeService {
 
   private recipes: Recipe[] = [];
 
-  constructor(
-    private shoppingListService: ShoppingListService,
-    private router: Router,
-    private store: Store<AppState>
-  ) {}
+  constructor(private router: Router, private store: Store<AppState>) {}
 
   setRecipes(recipes: Recipe[]) {
     this.recipes = recipes;
