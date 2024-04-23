@@ -1,19 +1,23 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AuthResponse } from '../models/auth-response.model';
 import { Auth } from '../models/auth.model';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { Store } from '@ngrx/store';
+import { signIn, signOut } from '../store/action/auth.actions';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  $user = new BehaviorSubject<User | undefined>(undefined);
-
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private store: Store
+  ) {}
 
   signUp(userDetails: Auth): Observable<AuthResponse> {
     return this.http
@@ -50,13 +54,13 @@ export class AuthService {
   }
 
   signOut() {
+    this.store.dispatch(signOut());
     localStorage.clear();
-    this.$user.next(undefined);
     this.router.navigate(['/auth']);
   }
 
   setUser(user: User) {
-    this.$user.next(user);
+    this.store.dispatch(signIn({ user }));
 
     localStorage.setItem('user', JSON.stringify(user));
   }
@@ -86,10 +90,6 @@ export class AuthService {
 
       this.setUser(loggedInUser);
     }
-  }
-
-  user(): Observable<User | undefined> {
-    return this.$user.asObservable();
   }
 
   private handleError(errorResponse: HttpErrorResponse) {

@@ -8,16 +8,18 @@ import {
 import { Injectable } from '@angular/core';
 import { AuthService } from '../../data-access/services/auth.service';
 import { exhaustMap, Observable, take } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectUser } from '../../data-access/store/selector/auth.selectors';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private store: Store) {}
 
   intercept(
-    req: HttpRequest<any>,
+    req: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    return this.authService.$user.pipe(
+  ): Observable<HttpEvent<unknown>> {
+    return this.store.select(selectUser).pipe(
       take(1),
       exhaustMap((user) => {
         if (!user) {

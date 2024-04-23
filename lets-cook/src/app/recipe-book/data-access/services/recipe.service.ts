@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { addMultiple } from 'src/app/shopping-list/data-access/store/action/shopping-list.actions';
-import { AppState } from 'src/app/shared/data-access/models/app-state.model';
 
 @Injectable({
   providedIn: 'root',
@@ -51,7 +50,7 @@ export class RecipeService {
 
   private recipes: Recipe[] = [];
 
-  constructor(private router: Router, private store: Store<AppState>) {}
+  constructor(private router: Router, private store: Store) {}
 
   setRecipes(recipes: Recipe[]) {
     this.recipes = recipes;

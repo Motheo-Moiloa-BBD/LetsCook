@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/shared/data-access/models/ingredient.model';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import {
   add,
   remove,
@@ -10,7 +10,6 @@ import {
   update,
 } from '../../data-access/store/action/shopping-list.actions';
 import { selectShoppingListState } from '../../data-access/store/selector/shopping-list.selectors';
-import { AppState } from 'src/app/shared/data-access/models/app-state.model';
 
 @Component({
   selector: 'app-edit-shopping-list',
@@ -31,11 +30,11 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     ]),
   });
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.editSubscription = this.store
-      .pipe(select(selectShoppingListState))
+      .select(selectShoppingListState)
       .subscribe((shoppingListState) => {
         if (
           shoppingListState.editedIngredientIndex > -1 &&
