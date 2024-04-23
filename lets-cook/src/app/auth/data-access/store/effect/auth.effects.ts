@@ -130,7 +130,7 @@ export class AuthEffects {
     { dispatch: false }
   );
 
-  sutoLogin$ = createEffect(
+  autoLogin$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(autoLogin),
@@ -148,7 +148,7 @@ export class AuthEffects {
               const currentTime = new Date().getTime();
 
               if (expiresIn < currentTime) {
-                //return signOut();
+                return signOut();
               }
 
               return authenticationSuccess({ user: loggedInUser });
