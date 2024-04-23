@@ -1,18 +1,50 @@
 import { createReducer, on } from '@ngrx/store';
 import { AuthState } from '../../models/auth-state.model';
-import { signIn, signOut } from '../action/auth.actions';
+import {
+  authenticationSuccess,
+  authenticationFail,
+  signInStart,
+  signOut,
+  signUpStart,
+  clearError,
+} from '../action/auth.actions';
 
 export const initialState: AuthState = {
   user: undefined,
+  authError: undefined,
+  loading: false,
 };
 
 export const authReducer = createReducer(
   initialState,
+
   on(
-    signIn,
+    authenticationSuccess,
     (state, { user }): AuthState => ({
       ...state,
       user: user,
+      authError: undefined,
+      loading: false,
+    })
+  ),
+
+  on(
+    authenticationFail,
+    (state, { errorMessage }): AuthState => ({
+      ...state,
+      user: undefined,
+      authError: errorMessage,
+      loading: false,
+    })
+  ),
+
+  on(
+    signInStart,
+    signUpStart,
+    (state): AuthState => ({
+      ...state,
+      authError: undefined,
+      loading: true,
     })
   ),
 
@@ -21,6 +53,14 @@ export const authReducer = createReducer(
     (state): AuthState => ({
       ...state,
       user: undefined,
+    })
+  ),
+
+  on(
+    clearError,
+    (state): AuthState => ({
+      ...state,
+      authError: undefined,
     })
   )
 );

@@ -1,19 +1,26 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { passwordValidator } from '../../utils/functions/password-validator.validator';
 import { AuthService } from '../../data-access/services/auth.service';
 import { Auth } from '../../data-access/models/auth.model';
-import { Observable, Subscription } from 'rxjs';
-import { AuthResponse } from '../../data-access/models/auth-response.model';
+import { Subscription } from 'rxjs';
+
 import { AlertComponent } from 'src/app/shared/ui/alert/alert.component';
 import { PlaceHolderDirective } from 'src/app/shared/utils/directives/place-holder.directive';
+import { Store } from '@ngrx/store';
+import {
+  clearError,
+  signInStart,
+  signUpStart,
+} from '../../data-access/store/action/auth.actions';
+import { selectAuthState } from '../../data-access/store/selector/auth.selectors';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css'],
 })
-export class AuthComponent implements OnDestroy {
+export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode: boolean = true;
   submitted: boolean = false;
   error: string = '';
@@ -21,6 +28,7 @@ export class AuthComponent implements OnDestroy {
   @ViewChild(PlaceHolderDirective, { static: false })
   alertHost?: PlaceHolderDirective;
   private closeSubscription?: Subscription;
+  private storeSubscription?: Subscription;
 
   authForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -30,7 +38,22 @@ export class AuthComponent implements OnDestroy {
     ),
   });
 
-  constructor(private authService: AuthService) {}
+  ngOnInit(): void {
+    // eslint-disable-next-line @ngrx/no-store-subscription
+    this.storeSubscription = this.store
+      .select(selectAuthState)
+      // eslint-disable-next-line @ngrx/no-store-subscription
+      .subscribe((authState) => {
+        this.isLoading = authState.loading;
+
+        if (authState.authError) {
+          this.error = authState.authError;
+          this.showErrorAlert(this.error);
+        }
+      });
+  }
+
+  constructor(private authService: AuthService, private store: Store) {}
 
   get formControls() {
     return this.authForm.controls;
@@ -48,33 +71,18 @@ export class AuthComponent implements OnDestroy {
         password: this.formControls.password.value!,
       };
 
-      let auth$: Observable<AuthResponse>;
-
-      this.isLoading = true;
-
       if (this.isLoginMode) {
-        auth$ = this.authService.signIn(userDetails);
+        this.store.dispatch(signInStart({ userDetails }));
       } else {
-        auth$ = this.authService.signUp(userDetails);
+        this.store.dispatch(signUpStart({ userDetails }));
       }
-
-      auth$.subscribe({
-        next: () => {
-          this.isLoading = false;
-        },
-        error: (error: Error) => {
-          this.error = error.message;
-          this.showErrorAlert(error.message);
-          this.isLoading = false;
-        },
-      });
 
       this.resetForm();
     }
   }
 
   onHandleError() {
-    this.error = '';
+    this.store.dispatch(clearError());
   }
 
   private showErrorAlert(message: string) {
@@ -103,6 +111,9 @@ export class AuthComponent implements OnDestroy {
   ngOnDestroy(): void {
     if (this.closeSubscription) {
       this.closeSubscription.unsubscribe();
+    }
+    if (this.storeSubscription) {
+      this.storeSubscription.unsubscribe();
     }
   }
 }

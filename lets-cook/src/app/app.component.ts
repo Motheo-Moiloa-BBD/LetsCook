@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './auth/data-access/services/auth.service';
+import { Store } from '@ngrx/store';
+import { autoLogin } from './auth/data-access/store/action/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +10,9 @@ import { AuthService } from './auth/data-access/services/auth.service';
 export class AppComponent implements OnInit {
   title = 'Lets Cook';
 
-  constructor(private authService: AuthService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.authService.autoLogin();
+    this.store.dispatch(autoLogin());
   }
 }

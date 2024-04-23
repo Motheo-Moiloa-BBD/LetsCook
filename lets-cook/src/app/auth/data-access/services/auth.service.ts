@@ -1,66 +1,23 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
-import { AuthResponse } from '../models/auth-response.model';
-import { Auth } from '../models/auth.model';
+import { throwError } from 'rxjs';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
 import { Store } from '@ngrx/store';
-import { signIn, signOut } from '../store/action/auth.actions';
+import { authenticationSuccess, signOut } from '../store/action/auth.actions';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private store: Store
-  ) {}
-
-  signUp(userDetails: Auth): Observable<AuthResponse> {
-    return this.http
-      .post<AuthResponse>(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebaseAPIKey}`,
-        { ...userDetails, returnSecureToken: true }
-      )
-      .pipe(catchError(this.handleError));
-  }
-
-  signIn(userDetails: Auth): Observable<AuthResponse> {
-    return this.http
-      .post<AuthResponse>(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebaseAPIKey}`,
-        { ...userDetails, returnSecureToken: true }
-      )
-      .pipe(
-        catchError(this.handleError),
-        tap((responseData: AuthResponse) => {
-          const expirationDate: Date = new Date(
-            new Date().getTime() +
-              Number.parseInt(responseData.expiresIn) * 1000
-          );
-          const user: User = {
-            id: responseData.localId,
-            email: responseData.email,
-            token: responseData.idToken,
-            tokenExpirationDate: expirationDate,
-          };
-
-          this.setUser(user);
-        })
-      );
-  }
+  constructor(private router: Router, private store: Store) {}
 
   signOut() {
     this.store.dispatch(signOut());
-    localStorage.clear();
-    this.router.navigate(['/auth']);
   }
 
   setUser(user: User) {
-    this.store.dispatch(signIn({ user }));
+    this.store.dispatch(authenticationSuccess({ user }));
 
     localStorage.setItem('user', JSON.stringify(user));
   }
@@ -88,7 +45,7 @@ export class AuthService {
         this.router.navigate(['/auth']);
       }
 
-      this.setUser(loggedInUser);
+      this.store.dispatch(authenticationSuccess({ user: loggedInUser }));
     }
   }
 

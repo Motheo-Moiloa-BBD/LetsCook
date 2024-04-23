@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataStorageService } from '../../data-access/services/data-storage.service';
-import { AuthService } from 'src/app/auth/data-access/services/auth.service';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectUser } from 'src/app/auth/data-access/store/selector/auth.selectors';
+import { signOut } from 'src/app/auth/data-access/store/action/auth.actions';
 
 @Component({
   selector: 'app-nav-bar',
@@ -17,11 +17,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   constructor(
     private dataStorageService: DataStorageService,
-    private authService: AuthService,
     private store: Store
   ) {}
 
   ngOnInit(): void {
+    // eslint-disable-next-line @ngrx/no-store-subscription
     this.userSubscription = this.store.select(selectUser).subscribe((user) => {
       this.isAuthenticated = !!user;
     });
@@ -36,7 +36,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
-    this.authService.signOut();
+    this.store.dispatch(signOut());
   }
 
   ngOnDestroy(): void {
