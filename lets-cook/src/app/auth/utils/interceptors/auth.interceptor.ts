@@ -6,14 +6,13 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService } from '../../data-access/services/auth.service';
 import { exhaustMap, Observable, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectUser } from '../../data-access/store/selector/auth.selectors';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
-  constructor(private authService: AuthService, private store: Store) {}
+  constructor(private store: Store) {}
 
   intercept(
     req: HttpRequest<unknown>,

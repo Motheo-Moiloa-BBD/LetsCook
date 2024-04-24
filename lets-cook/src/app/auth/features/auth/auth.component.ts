@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { passwordValidator } from '../../utils/functions/password-validator.validator';
-import { AuthService } from '../../data-access/services/auth.service';
 import { Auth } from '../../data-access/models/auth.model';
 import { Subscription } from 'rxjs';
 
@@ -53,7 +52,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       });
   }
 
-  constructor(private authService: AuthService, private store: Store) {}
+  constructor(private store: Store) {}
 
   get formControls() {
     return this.authForm.controls;

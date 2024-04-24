@@ -11,6 +11,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { appReducer } from './store/reducer/app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AuthEffects } from './auth/data-access/store/effect/auth.effects';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +22,7 @@ import { AuthEffects } from './auth/data-access/store/effect/auth.effects';
     StoreModule.forRoot(appReducer),
     EffectsModule.forRoot([AuthEffects]),
     StoreDevtoolsModule.instrument({ logOnly: !isDevMode() }),
+    StoreRouterConnectingModule.forRoot(),
   ],
   providers: [
     {

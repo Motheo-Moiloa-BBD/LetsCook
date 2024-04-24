@@ -2,16 +2,17 @@ import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { User } from '../../data-access/models/user.model';
 import { Store } from '@ngrx/store';
+import { selectUser } from '../../data-access/store/selector/auth.selectors';
 import { signOut } from '../../data-access/store/action/auth.actions';
-import { selectAuthState } from '../../data-access/store/selector/auth.selectors';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router: Router = inject(Router);
   const store: Store = inject(Store);
+
   let user: User | undefined;
 
-  store.select(selectAuthState).subscribe((authState) => {
-    user = authState.user;
+  store.select(selectUser).subscribe((loggedInUser) => {
+    user = loggedInUser;
   });
 
   if (user) {
@@ -27,7 +28,6 @@ export const authGuard: CanActivateFn = (route, state) => {
       return true;
     }
   } else {
-    store.dispatch(signOut());
     return router.createUrlTree(['/auth'], {
       queryParams: { returnUrl: state.url },
     });

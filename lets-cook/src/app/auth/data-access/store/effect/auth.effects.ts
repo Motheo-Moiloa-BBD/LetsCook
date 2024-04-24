@@ -27,7 +27,6 @@ const handleAuthentication = (responseData: AuthResponse) => {
     token: responseData.idToken,
     tokenExpirationDate: expirationDate,
   };
-
   localStorage.setItem('user', JSON.stringify(user));
 
   return authenticationSuccess({ user });
@@ -78,7 +77,6 @@ export class AuthEffects {
               return handleAuthentication(responseData);
             }),
             catchError((errorResponse) => {
-              //error handling code and return non error observable
               return handleError(errorResponse);
             })
           );
@@ -100,7 +98,6 @@ export class AuthEffects {
               return handleAuthentication(responseData);
             }),
             catchError((errorResponse) => {
-              //error handling code and return non error observable
               return handleError(errorResponse);
             })
           );
@@ -111,7 +108,7 @@ export class AuthEffects {
   authRedirect$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(authenticationSuccess, signOut),
+        ofType(authenticationSuccess),
         tap(() => {
           this.router.navigate(['/']);
         })
@@ -125,42 +122,40 @@ export class AuthEffects {
         ofType(signOut),
         tap(() => {
           localStorage.clear();
+          this.router.navigate(['/auth']);
         })
       ),
     { dispatch: false }
   );
 
-  autoLogin$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(autoLogin),
-        map(() => {
-          let loggedInUser: User;
-          const user: string | null = localStorage.getItem('user');
+  autoLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(autoLogin),
+      map(() => {
+        let loggedInUser: User;
+        const user: string | null = localStorage.getItem('user');
 
-          if (user) {
-            loggedInUser = JSON.parse(user);
+        if (user) {
+          loggedInUser = JSON.parse(user);
 
-            if (loggedInUser) {
-              const expiresIn = new Date(
-                loggedInUser.tokenExpirationDate
-              ).getTime();
-              const currentTime = new Date().getTime();
+          if (loggedInUser) {
+            const expiresIn = new Date(
+              loggedInUser.tokenExpirationDate
+            ).getTime();
+            const currentTime = new Date().getTime();
 
-              if (expiresIn < currentTime) {
-                return signOut();
-              }
-
-              return authenticationSuccess({ user: loggedInUser });
-            } else {
-              return { type: 'DUMMY' };
+            if (expiresIn < currentTime) {
+              return signOut();
             }
-          }
 
+            return authenticationSuccess({ user: loggedInUser });
+          }
           return { type: 'DUMMY' };
-        })
-      ),
-    { dispatch: false }
+        }
+
+        return { type: 'DUMMY' };
+      })
+    )
   );
 
   constructor(

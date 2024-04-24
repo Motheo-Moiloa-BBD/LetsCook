@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-output-native */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({

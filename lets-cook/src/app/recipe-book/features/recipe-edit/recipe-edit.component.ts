@@ -52,7 +52,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
           }
 
           if (this.recipe['ingredients']) {
-            for (let ingredient of this.recipe.ingredients) {
+            for (const ingredient of this.recipe.ingredients) {
               this.ingredients.push(
                 new FormGroup({
                   name: new FormControl(ingredient.name, Validators.required),
