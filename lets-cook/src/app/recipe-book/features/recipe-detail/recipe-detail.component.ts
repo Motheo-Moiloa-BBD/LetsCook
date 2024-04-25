@@ -1,8 +1,11 @@
+/* eslint-disable @ngrx/no-store-subscription */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Recipe } from '../../data-access/models/recipe.model';
 import { RecipeService } from '../../data-access/services/recipe.service';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectRecipeById } from '../../data-access/store/selector/recipe-book.selectors';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -17,13 +20,16 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
     this.paramSubscription = this.route.params.subscribe((params: Params) => {
       this.id = Number.parseInt(params['id']);
-      this.recipe = this.recipeService.getRecipeById(this.id);
+      this.store.select(selectRecipeById(this.id)).subscribe((recipe) => {
+        this.recipe = recipe;
+      })
     });
   }
 
