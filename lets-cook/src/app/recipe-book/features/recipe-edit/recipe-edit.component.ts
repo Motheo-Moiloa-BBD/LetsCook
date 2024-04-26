@@ -2,11 +2,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { RecipeService } from '../../data-access/services/recipe.service';
+import { Subscription, take } from 'rxjs';
 import { Recipe } from '../../data-access/models/recipe.model';
 import { Store } from '@ngrx/store';
-import { selectRecipeById } from '../../data-access/store/selector/recipe-book.selectors';
+import { selectRecipeById, selectRecipes } from '../../data-access/store/selector/recipe-book.selectors';
+import { addRecipe, updateRecipe } from '../../data-access/store/action/recipe-book.actions';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -15,6 +15,7 @@ import { selectRecipeById } from '../../data-access/store/selector/recipe-book.s
 })
 export class RecipeEditComponent implements OnInit, OnDestroy {
   private paramSubscription?: Subscription;
+  private storeSubscription?: Subscription;
   id?: number;
   editMode = false;
   submitted: boolean = false;
@@ -29,10 +30,9 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private recipeService: RecipeService,
     private router: Router,
     private store: Store
-  ) {}
+  ) { }
 
   get formControls() {
     return this.recipeForm.controls;
@@ -47,8 +47,9 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
       this.id = Number.parseInt(params['id']);
       this.editMode = params['id'] != null;
     });
+
     if (this.editMode && this.id) {
-      this.store.select(selectRecipeById(this.id)).subscribe((recipe) => {
+      this.storeSubscription = this.store.select(selectRecipeById(this.id)).subscribe((recipe) => {
         this.recipe = recipe;
       });
 
@@ -91,12 +92,14 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     };
 
     if (this.editMode) {
-      newRecipe.id = this.id!;
-      this.recipeService.updateReceipe(this.id!, newRecipe);
+      newRecipe.id = this.id;
+      this.store.dispatch(updateRecipe({ id: this.id!, updatedRecipe: newRecipe }))
       this.router.navigate(['/recipe-book', this.id]);
     } else {
-      newRecipe.id = this.recipeService.getRecipes().length + 1;
-      this.recipeService.addRecipe(newRecipe);
+      this.store.select(selectRecipes).pipe(take(1)).subscribe((recipes) => {
+        newRecipe.id = recipes.length + 1;
+      })
+      this.store.dispatch(addRecipe({ recipe: newRecipe }))
       this.router.navigate(['/recipe-book']);
     }
   }
@@ -119,10 +122,15 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   onCancel() {
     this.editMode = false;
-    this.router.navigate(['/recipe-book', this.id]);
+    this.router.navigate(['/recipe-book']);
   }
 
   ngOnDestroy(): void {
-    this.paramSubscription?.unsubscribe();
+    if (this.paramSubscription) {
+      this.paramSubscription.unsubscribe();
+    }
+    if (this.storeSubscription) {
+      this.storeSubscription.unsubscribe()
+    }
   }
 }

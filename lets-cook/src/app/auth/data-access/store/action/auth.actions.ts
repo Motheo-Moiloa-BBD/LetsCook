@@ -4,7 +4,7 @@ import { Auth } from '../../models/auth.model';
 
 export const authenticationSuccess = createAction(
   '[Auth] Authentication Success',
-  props<{ user: User }>()
+  props<{ user: User, redirect: boolean }>()
 );
 
 export const authenticationFail = createAction(

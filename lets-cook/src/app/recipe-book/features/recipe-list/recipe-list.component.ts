@@ -1,3 +1,4 @@
+/* eslint-disable @ngrx/no-store-subscription */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Recipe } from '../../data-access/models/recipe.model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,7 +12,7 @@ import { selectRecipes } from '../../data-access/store/selector/recipe-book.sele
   styleUrls: ['./recipe-list.component.css'],
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
-  private recipeListSunscription?: Subscription;
+  private recipeListSubscription?: Subscription;
   recipes: Recipe[] = [];
 
   constructor(
@@ -21,7 +22,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.recipeListSunscription = this.store.select(selectRecipes).subscribe(
+    this.recipeListSubscription = this.store.select(selectRecipes).subscribe(
       (recipes: Recipe[]) => {
         this.recipes = recipes;
       }
@@ -33,6 +34,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.recipeListSunscription!.unsubscribe();
+    if(this.recipeListSubscription){
+      this.recipeListSubscription.unsubscribe();
+    }
+    
   }
 }

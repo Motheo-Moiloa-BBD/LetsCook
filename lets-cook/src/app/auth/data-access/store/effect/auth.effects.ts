@@ -29,7 +29,7 @@ const handleAuthentication = (responseData: AuthResponse) => {
   };
   localStorage.setItem('user', JSON.stringify(user));
 
-  return authenticationSuccess({ user });
+  return authenticationSuccess({ user, redirect: true });
 };
 
 const handleError = (errorResponse: HttpErrorResponse) => {
@@ -63,6 +63,12 @@ const handleError = (errorResponse: HttpErrorResponse) => {
 
 @Injectable()
 export class AuthEffects {
+  constructor(
+    private actions$: Actions,
+    private http: HttpClient,
+    private router: Router
+  ) {}
+
   authSignUp$ = createEffect(() =>
     this.actions$.pipe(
       ofType(signUpStart),
@@ -109,8 +115,10 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(authenticationSuccess),
-        tap(() => {
+        tap((action) => {
+          if(action.redirect){
           this.router.navigate(['/']);
+          }
         })
       ),
     { dispatch: false }
@@ -148,7 +156,7 @@ export class AuthEffects {
               return signOut();
             }
 
-            return authenticationSuccess({ user: loggedInUser });
+            return authenticationSuccess({ user: loggedInUser, redirect: false });
           }
           return { type: 'DUMMY' };
         }
@@ -158,9 +166,5 @@ export class AuthEffects {
     )
   );
 
-  constructor(
-    private actions$: Actions,
-    private http: HttpClient,
-    private router: Router
-  ) {}
+  
 }

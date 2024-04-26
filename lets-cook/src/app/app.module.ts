@@ -12,6 +12,7 @@ import { appReducer } from './store/reducer/app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AuthEffects } from './auth/data-access/store/effect/auth.effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { RecipeBookEffects } from './recipe-book/data-access/store/effect/recipe-book.effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,7 +21,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
     AppRoutingModule,
     SharedModule,
     StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipeBookEffects]),
     StoreDevtoolsModule.instrument({ logOnly: !isDevMode() }),
     StoreRouterConnectingModule.forRoot(),
   ],
